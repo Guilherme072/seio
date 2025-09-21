@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react" // Verifiquei que o useEffect já estava aqui
+import { useState, useEffect } from "react";
 import {
   Plus,
   Search,
@@ -15,23 +15,38 @@ import {
   ChevronRight,
   Sparkles,
   Zap,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ChevronDown, AlertTriangle } from "lucide-react"
-import { BrandCard } from "@/components/brand-card"
-import { AddBrandDialog } from "@/components/add-brand-dialog"
-import { BrandDetailsModal } from "@/components/brand-details-modal"
+  ChevronDown,
+  AlertTriangle,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { BrandCard } from "@/components/brand-card";
+import { AddBrandDialog } from "@/components/add-brand-dialog";
+import { BrandDetailsModal } from "@/components/brand-details-modal";
 
-// Dados mockados (seu array de mockBrands continua aqui, omitido para economizar espaço)
+// SEU ARRAY DE DADOS 100% COMPLETO
 const mockBrands = [
-  // ... seu array gigante de contatos fica aqui ...
-  // EMPRESAS - Tecnologia e E-commerce
   {
     id: 1,
     name: "Casas Bahia / Ponto Frio",
@@ -227,8 +242,6 @@ const mockBrands = [
     addedBy: "Sistema",
     suggestedBy: null,
   },
-
-  // EMPRESAS - Alimentos e Bebidas
   {
     id: 6,
     name: "Ambev",
@@ -387,8 +400,6 @@ const mockBrands = [
     addedBy: "Sistema",
     suggestedBy: null,
   },
-
-  // CASAS DE APOSTAS
   {
     id: 10,
     name: "KTO",
@@ -537,8 +548,6 @@ const mockBrands = [
     addedBy: "Sistema",
     suggestedBy: null,
   },
-
-  // AGÊNCIAS
   {
     id: 14,
     name: "Publination",
@@ -670,8 +679,6 @@ const mockBrands = [
     addedBy: "Sistema",
     suggestedBy: null,
   },
-
-  // PESSOAS INFLUENTES
   {
     id: 17,
     name: "Allan Jesus",
@@ -735,8 +742,6 @@ const mockBrands = [
     addedBy: "Sistema",
     suggestedBy: null,
   },
-
-  // FREELANCERS
   {
     id: 19,
     name: "Yago - Relam⚡",
@@ -811,8 +816,6 @@ const mockBrands = [
     addedBy: "Sistema",
     suggestedBy: null,
   },
-
-  // PARCERIAS A SEREM BUSCADAS (sem contatos)
   {
     id: 21,
     name: "Nike",
@@ -988,8 +991,7 @@ const getFaqByCategory = (category: string) => {
       answer:
         "• Aguarde 1 semana antes do follow-up\n• Mude o canal de comunicação (email → WhatsApp)\n• Ofereça algo de valor (relatório, insight)\n• Tente contatar outra pessoa da equipe\n• Use gatilhos de urgência (oportunidade limitada)",
     },
-  ]
-
+  ];
   const categorySpecific = {
     Marca: [
       {
@@ -1063,422 +1065,511 @@ const getFaqByCategory = (category: string) => {
           "• Behance e Dribbble para designers\n• LinkedIn para diversos profissionais\n• Indicações de outros clientes\n• Portfólios online e redes sociais\n• Teste com projetos pequenos primeiro",
       },
     ],
-  }
+  };
+  return [...baseFaq, ...(categorySpecific[category] || [])];
+};
 
-  return [...baseFaq, ...(categorySpecific[category] || [])]
-}
+// Componente para mostrar um feedback de carregamento
+const LoadingSkeleton = () => (
+  <div className="flex items-center justify-center py-24">
+    <div className="relative">
+      <div className="w-12 h-12 rounded-full border-2 border-transparent border-t-[#8A4BFF] animate-spin"></div>
+      <div className="absolute inset-0 w-12 h-12 rounded-full border-2 border-transparent border-r-[#DB9EFF] animate-spin animation-delay-150"></div>
+    </div>
+  </div>
+);
 
-
+// ===================================================================================
+// COMPONENTE PRINCIPAL DA PÁGINA
+// ===================================================================================
 export default function MailingControl() {
-  const [brands, setBrands] = useState(mockBrands)
-  const [selectedBrand, setSelectedBrand] = useState(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [categoryFilter, setCategoryFilter] = useState("all")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState("todos")
-
-  // ADICIONADO: Estado para controlar se o componente está no lado do cliente
-  const [isClient, setIsClient] = useState(false)
-
-  // ADICIONADO: Efeito que roda apenas no cliente para atualizar o estado
+  // --- CORREÇÃO DEFINITIVA PARA ERRO DE HIDRATAÇÃO ---
+  const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => {
-    setIsClient(true)
-  }, [])
+    setHasMounted(true);
+  }, []);
 
+  // --- ESTADOS DO COMPONENTE ---
+  const [brands, setBrands] = useState(mockBrands);
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("todos");
 
-  // Simular loading ao trocar de aba
+  // --- FUNÇÕES DE LÓGICA ---
   const handleTabChange = (value: string) => {
-    setIsLoading(true)
-    setActiveTab(value)
-    setTimeout(() => setIsLoading(false), 300)
-  }
+    setIsLoading(true);
+    setActiveTab(value);
+    setTimeout(() => setIsLoading(false), 300);
+  };
 
   const getFilteredBrands = (category = "all") => {
     return brands.filter((brand) => {
       const matchesSearch =
         brand.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        brand.category.toLowerCase().includes(searchTerm.toLowerCase())
-      const matchesCategory = categoryFilter === "all" || brand.category === categoryFilter
-      const matchesStatus = statusFilter === "all" || brand.status === statusFilter
-      const matchesTabCategory = category === "all" || brand.category === category
+        brand.category.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        categoryFilter === "all" || brand.category === categoryFilter;
+      const matchesStatus =
+        statusFilter === "all" || brand.status === statusFilter;
+      const matchesTabCategory =
+        category === "all" || brand.category === category;
+      return (
+        matchesSearch && matchesCategory && matchesStatus && matchesTabCategory
+      );
+    });
+  };
 
-      return matchesSearch && matchesCategory && matchesStatus && matchesTabCategory
-    })
-  }
-
-  const categories = [...new Set(brands.map((brand) => brand.category))]
-  const statuses = [...new Set(brands.map((brand) => brand.status))]
-
-  // Marcas sem contatos para a seção "Parcerias a serem buscadas"
-  const getBrandsWithoutContacts = (category = "all") => {
-    return brands.filter((brand) => brand.contacts.length === 0 && (category === "all" || brand.category === category))
-  }
+  const categories = [...new Set(brands.map((b) => b.category))];
+  const statuses = [...new Set(brands.map((b) => b.status))];
+  const getBrandsWithoutContacts = (category = "all") =>
+    brands.filter(
+      (b) =>
+        b.contacts.length === 0 &&
+        (category === "all" || b.category === category)
+    );
 
   const stats = {
     totalBrands: brands.length,
-    totalContacts: brands.reduce((acc, brand) => acc + brand.contacts.length, 0),
-    activeBrands: brands.filter((brand) => brand.status === "Ativo").length,
-    prospects: brands.filter((brand) => brand.status === "Prospecto").length,
-    neverContacted: brands.filter((brand) => brand.neverContacted).length,
     byCategory: {
-      Marca: brands.filter((brand) => brand.category === "Marca").length,
-      Bet: brands.filter((brand) => brand.category === "Bet").length,
-      Agência: brands.filter((brand) => brand.category === "Agência").length,
-      Influenciador: brands.filter((brand) => brand.category === "Influenciador").length,
-      "Pessoa Influente": brands.filter((brand) => brand.category === "Pessoa Influente").length,
-      Freelancer: brands.filter((brand) => brand.category === "Freelancer").length,
+      Marca: brands.filter((b) => b.category === "Marca").length,
+      Bet: brands.filter((b) => b.category === "Bet").length,
+      Agência: brands.filter((b) => b.category === "Agência").length,
+      Influenciador: brands.filter((b) => b.category === "Influenciador")
+        .length,
+      "Pessoa Influente": brands.filter(
+        (b) => b.category === "Pessoa Influente"
+      ).length,
+      Freelancer: brands.filter((b) => b.category === "Freelancer").length,
     },
-  }
+  };
 
   const getCategoryMessage = (category: string) => {
     switch (category) {
       case "Marca":
         return {
           title: "💼 Foco em Parcerias Comerciais",
-          message: "Priorize fechar parcerias duradouras. Apresente cases de sucesso e ROI comprovado.",
+          message:
+            "Priorize fechar parcerias duradouras. Apresente cases de sucesso e ROI comprovado.",
           icon: Briefcase,
-        }
+        };
       case "Bet":
         return {
           title: "⚠️ Jogo Responsável",
-          message: "IMPORTANTE: Sempre promover jogo responsável. Público 18+. Verificar compliance legal.",
+          message:
+            "IMPORTANTE: Sempre promover jogo responsável. Público 18+. Verificar compliance legal.",
           icon: AlertTriangle,
-        }
+        };
       case "Agência":
         return {
           title: "📊 Benchmarking Construtivo",
-          message: "Analise estratégias e cases. Oportunidade de aprendizado mútuo e parcerias estratégicas.",
+          message:
+            "Analise estratégias e cases. Oportunidade de aprendizado mútuo e parcerias estratégicas.",
           icon: TrendingUp,
-        }
+        };
       case "Influenciador":
         return {
           title: "🌟 Relacionamento Direto",
-          message: "Construa relacionamentos autênticos. Foque no fit com a marca e engajamento real.",
+          message:
+            "Construa relacionamentos autênticos. Foque no fit com a marca e engajamento real.",
           icon: Star,
-        }
+        };
       case "Pessoa Influente":
         return {
           title: "👑 Alto Impacto",
-          message: "Contatos de alto valor. Abordagem mais formal. Geralmente via assessoria ou empresários.",
+          message:
+            "Contatos de alto valor. Abordagem mais formal. Geralmente via assessoria ou empresários.",
           icon: UserCheck,
-        }
+        };
       case "Freelancer":
         return {
           title: "🎨 Talentos Criativos",
-          message: "Profissionais para demandas específicas. Mantenha portfólio atualizado e prazos claros.",
+          message:
+            "Profissionais para demandas específicas. Mantenha portfólio atualizado e prazos claros.",
           icon: Palette,
-        }
+        };
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   const renderTabContent = (category = "all") => {
-    const filteredBrands = getFilteredBrands(category)
-    const categoryMessage = getCategoryMessage(category)
-    const categoryBrandsWithoutContacts = getBrandsWithoutContacts(category)
-    const faqData = getFaqByCategory(category)
+    const filteredBrands = getFilteredBrands(category);
+    const categoryMessage = getCategoryMessage(category);
+    const categoryBrandsWithoutContacts = getBrandsWithoutContacts(category);
+    const faqData = getFaqByCategory(category);
 
     return (
       <div className="space-y-16">
-        {/* Loading State */}
-        {isLoading && (
-          <div className="flex items-center justify-center py-24">
-            <div className="relative">
-              <div className="w-12 h-12 rounded-full border-2 border-transparent border-t-[#8A4BFF] animate-spin"></div>
-              <div className="absolute inset-0 w-12 h-12 rounded-full border-2 border-transparent border-r-[#DB9EFF] animate-spin animation-delay-150"></div>
-            </div>
-          </div>
-        )}
-
-        <div
-          className={`transition-all duration-500 space-y-16 ${isLoading ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"}`}
-        >
-          {/* Category Message */}
-          {categoryMessage && (
-            <Card className="eclipse-card eclipse-card-hover rounded-2xl border-2">
-              <CardContent className="p-8">
-                <div className="flex items-center gap-6">
-                  <div className="p-4 rounded-2xl eclipse-gradient">
-                    <categoryMessage.icon className="h-8 w-8 eclipse-text-primary" />
+        {isLoading ? (
+          <LoadingSkeleton />
+        ) : (
+          <div
+            className={`transition-all duration-500 space-y-16 ${
+              isLoading
+                ? "opacity-0 translate-y-4"
+                : "opacity-100 translate-y-0"
+            }`}
+          >
+            {categoryMessage && (
+              <Card className="eclipse-card eclipse-card-hover rounded-2xl border-2">
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-6">
+                    <div className="p-4 rounded-2xl eclipse-gradient">
+                      <categoryMessage.icon className="h-8 w-8 eclipse-text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="eclipse-title text-2xl font-bold mb-3 flex items-center gap-4">
+                        {categoryMessage.title}
+                        <ChevronRight className="h-6 w-6 eclipse-accent eclipse-pulse" />
+                      </h3>
+                      <p className="eclipse-text-secondary text-base leading-relaxed">
+                        {categoryMessage.message}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="eclipse-title text-2xl font-bold mb-3 flex items-center gap-4">
-                      {categoryMessage.title}
-                      <ChevronRight className="h-6 w-6 eclipse-accent eclipse-pulse" />
-                    </h3>
-                    <p className="eclipse-text-secondary text-base leading-relaxed">{categoryMessage.message}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Filters */}
-          <Card className="eclipse-card eclipse-card-hover rounded-2xl">
-            <CardHeader className="pb-6">
-              <CardTitle className="eclipse-title text-2xl flex items-center gap-4">
-                <Search className="h-6 w-6 eclipse-accent" />
-                Filtros e Busca
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-8 pb-8">
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-1">
-                  <div className="relative group">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 eclipse-text-muted transition-colors group-focus-within:eclipse-accent" />
-                    <Input
-                      placeholder="Buscar por nome ou categoria..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-14 h-14 rounded-xl eclipse-input border-0 focus:ring-2 focus:ring-[#8A4BFF]/30 transition-all duration-300 text-base"
-                    />
-                  </div>
-                </div>
-
-                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger className="w-full md:w-56 h-14 rounded-xl eclipse-input border-0 eclipse-text-primary text-base">
-                    <SelectValue placeholder="Categoria" />
-                  </SelectTrigger>
-                  <SelectContent className="eclipse-card rounded-xl border-0">
-                    <SelectItem value="all">Todas as Categorias</SelectItem>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat} value={cat} className="eclipse-text-primary hover:eclipse-gradient">
-                        {cat}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-full md:w-56 h-14 rounded-xl eclipse-input border-0 eclipse-text-primary text-base">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent className="eclipse-card rounded-xl border-0">
-                    <SelectItem value="all">Todos os Status</SelectItem>
-                    {statuses.map((status) => (
-                      <SelectItem key={status} value={status} className="eclipse-text-primary hover:eclipse-gradient">
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Brands Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredBrands.map((brand, index) => (
-              <div
-                key={brand.id}
-                className="animate-in fade-in slide-in-from-bottom-4"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <BrandCard
-                  brand={brand}
-                  onClick={() => setSelectedBrand(brand)}
-                  onUpdate={(updatedBrand) => {
-                    setBrands(brands.map((b) => (b.id === updatedBrand.id ? updatedBrand : b)))
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-
-          {filteredBrands.length === 0 && !isLoading && (
+                </CardContent>
+              </Card>
+            )}
             <Card className="eclipse-card eclipse-card-hover rounded-2xl">
-              <CardContent className="text-center py-20">
-                <div className="p-6 rounded-2xl eclipse-gradient inline-block mb-8">
-                  <Building2 className="h-16 w-16 eclipse-text-primary eclipse-pulse" />
+              <CardHeader className="pb-6">
+                <CardTitle className="eclipse-title text-2xl flex items-center gap-4">
+                  <Search className="h-6 w-6 eclipse-accent" />
+                  Filtros e Busca
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-8 pb-8">
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="flex-1">
+                    <div className="relative group">
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 eclipse-text-muted transition-colors group-focus-within:eclipse-accent" />
+                      <Input
+                        placeholder="Buscar por nome ou categoria..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-14 h-14 rounded-xl eclipse-input border-0 focus:ring-2 focus:ring-[#8A4BFF]/30 transition-all duration-300 text-base"
+                      />
+                    </div>
+                  </div>
+                  <Select
+                    value={categoryFilter}
+                    onValueChange={setCategoryFilter}
+                  >
+                    <SelectTrigger className="w-full md:w-56 h-14 rounded-xl eclipse-input border-0 eclipse-text-primary text-base">
+                      <SelectValue placeholder="Categoria" />
+                    </SelectTrigger>
+                    <SelectContent className="eclipse-card rounded-xl border-0">
+                      <SelectItem value="all">Todas as Categorias</SelectItem>
+                      {categories.map((cat) => (
+                        <SelectItem
+                          key={cat}
+                          value={cat}
+                          className="eclipse-text-primary hover:eclipse-gradient"
+                        >
+                          {cat}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger className="w-full md:w-56 h-14 rounded-xl eclipse-input border-0 eclipse-text-primary text-base">
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent className="eclipse-card rounded-xl border-0">
+                      <SelectItem value="all">Todos os Status</SelectItem>
+                      {statuses.map((status) => (
+                        <SelectItem
+                          key={status}
+                          value={status}
+                          className="eclipse-text-primary hover:eclipse-gradient"
+                        >
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <h3 className="eclipse-title text-2xl font-bold mb-4">Nenhum resultado encontrado</h3>
-                <p className="eclipse-text-secondary mb-8 max-w-md mx-auto text-base leading-relaxed">
-                  Tente ajustar os filtros ou adicione um novo contato para começar.
-                </p>
-                <Button
-                  onClick={() => setShowAddDialog(true)}
-                  className="eclipse-button-primary h-14 px-10 rounded-xl font-semibold text-base"
-                >
-                  <Plus className="h-5 w-5 mr-3" />
-                  Adicionar Novo
-                </Button>
               </CardContent>
             </Card>
-          )}
-
-          {/* Parcerias a Serem Buscadas */}
-          {categoryBrandsWithoutContacts.length > 0 && (
-            <Card className="eclipse-card eclipse-card-hover rounded-2xl border-2 border-red-500/20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredBrands.map((brand, index) => (
+                <div
+                  key={brand.id}
+                  className="animate-in fade-in slide-in-from-bottom-4"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <BrandCard
+                    brand={brand}
+                    onClick={() => setSelectedBrand(brand)}
+                    onUpdate={(updatedBrand) => {
+                      setBrands(
+                        brands.map((b) =>
+                          b.id === updatedBrand.id ? updatedBrand : b
+                        )
+                      );
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            {filteredBrands.length === 0 && !isLoading && (
+              <Card className="eclipse-card eclipse-card-hover rounded-2xl">
+                <CardContent className="text-center py-20">
+                  <div className="p-6 rounded-2xl eclipse-gradient inline-block mb-8">
+                    <Building2 className="h-16 w-16 eclipse-text-primary eclipse-pulse" />
+                  </div>
+                  <h3 className="eclipse-title text-2xl font-bold mb-4">
+                    Nenhum resultado encontrado
+                  </h3>
+                  <p className="eclipse-text-secondary mb-8 max-w-md mx-auto text-base leading-relaxed">
+                    Tente ajustar os filtros ou adicione um novo contato para
+                    começar.
+                  </p>
+                  <Button
+                    onClick={() => setShowAddDialog(true)}
+                    className="eclipse-button-primary h-14 px-10 rounded-xl font-semibold text-base"
+                  >
+                    <Plus className="h-5 w-5 mr-3" />
+                    Adicionar Novo
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+            {categoryBrandsWithoutContacts.length > 0 && (
+              <Card className="eclipse-card eclipse-card-hover rounded-2xl border-2 border-red-500/20">
+                <CardHeader className="pb-6">
+                  <div className="flex items-center gap-6">
+                    <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20">
+                      <Target className="h-8 w-8 text-red-400 eclipse-pulse" />
+                    </div>
+                    <div>
+                      <CardTitle className="eclipse-title text-2xl flex items-center gap-4">
+                        Parcerias a Serem Buscadas
+                        <Badge className="eclipse-badge-danger text-sm px-4 py-2 rounded-full">
+                          {categoryBrandsWithoutContacts.length}
+                        </Badge>
+                      </CardTitle>
+                      <CardDescription className="eclipse-text-secondary mt-2 text-base">
+                        {category === "all"
+                          ? "Contatos que ainda não possuem informações cadastradas e precisam de prospecção"
+                          : `${category}s que precisam de prospecção e desenvolvimento de relacionamento`}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="px-8 pb-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {categoryBrandsWithoutContacts.map((brand, index) => (
+                      <Card
+                        key={brand.id}
+                        className="eclipse-card eclipse-card-hover rounded-xl border border-red-500/20 animate-in fade-in slide-in-from-left-4 h-full"
+                        style={{ animationDelay: `${index * 150}ms` }}
+                      >
+                        <CardContent className="p-6 h-full flex flex-col">
+                          <div className="flex items-center gap-4 mb-6">
+                            <div className="w-14 h-14 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                              <AlertTriangle className="h-7 w-7 text-red-400" />
+                            </div>
+                            <div>
+                              <h3 className="eclipse-text-primary font-semibold text-lg">
+                                {brand.name}
+                              </h3>
+                              <p className="eclipse-text-muted text-sm">
+                                {brand.category}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="space-y-4 text-sm flex-1">
+                            <div className="flex justify-between items-center">
+                              <span className="eclipse-text-muted">
+                                Adicionado por:
+                              </span>
+                              <span className="eclipse-text-secondary font-medium">
+                                {brand.addedBy}
+                              </span>
+                            </div>
+                            {brand.suggestedBy && (
+                              <div className="flex justify-between items-center">
+                                <span className="eclipse-text-muted">
+                                  Sugerido por:
+                                </span>
+                                <span className="eclipse-accent font-medium">
+                                  {brand.suggestedBy}
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex justify-between items-center">
+                              <span className="eclipse-text-muted">
+                                Influenciadores:
+                              </span>
+                              <Badge className="eclipse-badge text-xs px-3 py-1 rounded-full">
+                                {brand.suggestedInfluencers.length}
+                              </Badge>
+                            </div>
+                          </div>
+                          <Button
+                            size="sm"
+                            className="w-full mt-6 eclipse-button h-12 rounded-lg font-medium"
+                            onClick={() => setSelectedBrand(brand)}
+                          >
+                            <Sparkles className="h-4 w-4 mr-2" />
+                            Ver Detalhes
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            <Card className="eclipse-card eclipse-card-hover rounded-2xl">
               <CardHeader className="pb-6">
                 <div className="flex items-center gap-6">
-                  <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20">
-                    <Target className="h-8 w-8 text-red-400 eclipse-pulse" />
+                  <div className="p-4 rounded-2xl eclipse-gradient">
+                    <HelpCircle className="h-8 w-8 eclipse-text-primary eclipse-pulse" />
                   </div>
                   <div>
                     <CardTitle className="eclipse-title text-2xl flex items-center gap-4">
-                      Parcerias a Serem Buscadas
-                      <Badge className="eclipse-badge-danger text-sm px-4 py-2 rounded-full">
-                        {categoryBrandsWithoutContacts.length}
-                      </Badge>
+                      Dúvidas Frequentes e Dicas
+                      {category !== "all" && (
+                        <Badge className="eclipse-badge text-sm px-4 py-2 rounded-full">
+                          {category}
+                        </Badge>
+                      )}
                     </CardTitle>
                     <CardDescription className="eclipse-text-secondary mt-2 text-base">
                       {category === "all"
-                        ? "Contatos que ainda não possuem informações cadastradas e precisam de prospecção"
-                        : `${category}s que precisam de prospecção e desenvolvimento de relacionamento`}
+                        ? "Guia prático para melhorar suas abordagens e relacionamentos"
+                        : `Dicas específicas para trabalhar com ${category.toLowerCase()}s`}
                     </CardDescription>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="px-8 pb-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {categoryBrandsWithoutContacts.map((brand, index) => (
-                    <Card
-                      key={brand.id}
-                      className="eclipse-card eclipse-card-hover rounded-xl border border-red-500/20 animate-in fade-in slide-in-from-left-4 h-full"
-                      style={{ animationDelay: `${index * 150}ms` }}
-                    >
-                      <CardContent className="p-6 h-full flex flex-col">
-                        <div className="flex items-center gap-4 mb-6">
-                          <div className="w-14 h-14 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                            <AlertTriangle className="h-7 w-7 text-red-400" />
-                          </div>
-                          <div>
-                            <h3 className="eclipse-text-primary font-semibold text-lg">{brand.name}</h3>
-                            <p className="eclipse-text-muted text-sm">{brand.category}</p>
-                          </div>
-                        </div>
-
-                        <div className="space-y-4 text-sm flex-1">
-                          <div className="flex justify-between items-center">
-                            <span className="eclipse-text-muted">Adicionado por:</span>
-                            <span className="eclipse-text-secondary font-medium">{brand.addedBy}</span>
-                          </div>
-
-                          {brand.suggestedBy && (
-                            <div className="flex justify-between items-center">
-                              <span className="eclipse-text-muted">Sugerido por:</span>
-                              <span className="eclipse-accent font-medium">{brand.suggestedBy}</span>
-                            </div>
-                          )}
-
-                          <div className="flex justify-between items-center">
-                            <span className="eclipse-text-muted">Influenciadores:</span>
-                            <Badge className="eclipse-badge text-xs px-3 py-1 rounded-full">
-                              {brand.suggestedInfluencers.length}
-                            </Badge>
-                          </div>
-                        </div>
-
-                        <Button
-                          size="sm"
-                          className="w-full mt-6 eclipse-button h-12 rounded-lg font-medium"
-                          onClick={() => setSelectedBrand(brand)}
-                        >
-                          <Sparkles className="h-4 w-4 mr-2" />
-                          Ver Detalhes
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+              <CardContent className="space-y-6 px-8 pb-8">
+                {faqData.map((faq, index) => (
+                  <Collapsible key={index}>
+                    <CollapsibleTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-between p-6 h-auto eclipse-card eclipse-card-hover rounded-xl border-0"
+                      >
+                        <span className="eclipse-text-primary font-medium text-left flex items-center gap-4 text-base">
+                          <Zap className="h-5 w-5 eclipse-accent" />
+                          {faq.question}
+                        </span>
+                        <ChevronDown className="h-5 w-s5 eclipse-accent transition-transform duration-200" />
+                      </Button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="px-6 pb-6 animate-in slide-in-from-top-2">
+                      <div className="eclipse-text-secondary text-sm whitespace-pre-line eclipse-gradient p-6 rounded-xl border border-[#8A4BFF]/20 leading-relaxed mt-4">
+                        {faq.answer}
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))}
               </CardContent>
             </Card>
-          )}
+          </div>
+        )}
+      </div>
+    );
+  };
 
-          {/* FAQ */}
-          <Card className="eclipse-card eclipse-card-hover rounded-2xl">
-            <CardHeader className="pb-6">
-              <div className="flex items-center gap-6">
-                <div className="p-4 rounded-2xl eclipse-gradient">
-                  <HelpCircle className="h-8 w-8 eclipse-text-primary eclipse-pulse" />
-                </div>
-                <div>
-                  <CardTitle className="eclipse-title text-2xl flex items-center gap-4">
-                    Dúvidas Frequentes e Dicas
-                    {category !== "all" && (
-                      <Badge className="eclipse-badge text-sm px-4 py-2 rounded-full">{category}</Badge>
-                    )}
-                  </CardTitle>
-                  <CardDescription className="eclipse-text-secondary mt-2 text-base">
-                    {category === "all"
-                      ? "Guia prático para melhorar suas abordagens e relacionamentos"
-                      : `Dicas específicas para trabalhar com ${category.toLowerCase()}s`}
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6 px-8 pb-8">
-              {faqData.map((faq, index) => (
-                <Collapsible key={index}>
-                  <CollapsibleTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-between p-6 h-auto eclipse-card eclipse-card-hover rounded-xl border-0"
-                    >
-                      <span className="eclipse-text-primary font-medium text-left flex items-center gap-4 text-base">
-                        <Zap className="h-5 w-5 eclipse-accent" />
-                        {faq.question}
-                      </span>
-                      <ChevronDown className="h-5 w-5 eclipse-accent transition-transform duration-200" />
-                    </Button>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="px-6 pb-6 animate-in slide-in-from-top-2">
-                    <div className="eclipse-text-secondary text-sm whitespace-pre-line eclipse-gradient p-6 rounded-xl border border-[#8A4BFF]/20 leading-relaxed mt-4">
-                      {faq.answer}
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
-              ))}
-            </CardContent>
-          </Card>
+  if (!hasMounted) {
+    return (
+      <div className="min-h-screen eclipse-bg eclipse-scroll">
+        <div className="max-w-7xl mx-auto p-10 space-y-12">
+          <div className="flex items-center justify-between">
+            <div className="space-y-3">
+              <h1 className="eclipse-title text-5xl font-bold">
+                Controle de Mailing
+              </h1>
+              <p className="eclipse-text-secondary text-xl">
+                Gerencie contatos de marcas, agências, influenciadores e
+                freelancers
+              </p>
+            </div>
+            <Button
+              className="eclipse-button-primary h-14 px-8 rounded-xl font-semibold flex items-center gap-3 text-base"
+              disabled
+            >
+              <Plus className="h-6 w-6" /> Novo Contato
+            </Button>
+          </div>
+          <LoadingSkeleton />
         </div>
       </div>
-    )
+    );
   }
 
-  // ADICIONADO: Condição para não renderizar no servidor e evitar o erro
-  if (!isClient) {
-    return null;
-  }
-  
   return (
     <div className="min-h-screen eclipse-bg eclipse-scroll">
       <div className="max-w-7xl mx-auto p-10 space-y-12">
-        {/* Header */}
         <div className="flex items-center justify-between animate-in fade-in slide-in-from-top-4">
           <div className="space-y-3">
-            <h1 className="eclipse-title text-5xl font-bold">Controle de Mailing</h1>
+            <h1 className="eclipse-title text-5xl font-bold">
+              Controle de Mailing
+            </h1>
             <p className="eclipse-text-secondary text-xl">
-              Gerencie contatos de marcas, agências, influenciadores e freelancers
+              Gerencie contatos de marcas, agências, influenciadores e
+              freelancers
             </p>
           </div>
           <Button
             onClick={() => setShowAddDialog(true)}
             className="eclipse-button-primary h-14 px-8 rounded-xl font-semibold flex items-center gap-3 text-base"
           >
-            <Plus className="h-6 w-6" />
-            Novo Contato
+            <Plus className="h-6 w-6" /> Novo Contato
           </Button>
         </div>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
           {[
-            { title: "Total", value: stats.totalBrands, icon: Building2, color: "eclipse-text-primary" },
-            { title: "Marcas", value: stats.byCategory.Marca, icon: Briefcase, color: "text-blue-400" },
-            { title: "Bets", value: stats.byCategory.Bet, icon: TrendingUp, color: "text-red-400" },
-            { title: "Agências", value: stats.byCategory.Agência, icon: Building2, color: "text-purple-400" },
-            { title: "Influencers", value: stats.byCategory.Influenciador, icon: Star, color: "text-yellow-400" },
+            {
+              title: "Total",
+              value: stats.totalBrands,
+              icon: Building2,
+              color: "eclipse-text-primary",
+            },
+            {
+              title: "Marcas",
+              value: stats.byCategory.Marca,
+              icon: Briefcase,
+              color: "text-blue-400",
+            },
+            {
+              title: "Bets",
+              value: stats.byCategory.Bet,
+              icon: TrendingUp,
+              color: "text-red-400",
+            },
+            {
+              title: "Agências",
+              value: stats.byCategory.Agência,
+              icon: Building2,
+              color: "text-purple-400",
+            },
+            {
+              title: "Influencers",
+              value: stats.byCategory.Influenciador,
+              icon: Star,
+              color: "text-yellow-400",
+            },
             {
               title: "Influentes",
               value: stats.byCategory["Pessoa Influente"],
               icon: UserCheck,
               color: "text-green-400",
             },
-            { title: "Freelancers", value: stats.byCategory.Freelancer, icon: Palette, color: "text-orange-400" },
+            {
+              title: "Freelancers",
+              value: stats.byCategory.Freelancer,
+              icon: Palette,
+              color: "text-orange-400",
+            },
           ].map((stat, index) => (
             <Card
               key={stat.title}
@@ -1486,17 +1577,25 @@ export default function MailingControl() {
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                <CardTitle className="eclipse-text-secondary text-sm font-medium">{stat.title}</CardTitle>
+                <CardTitle className="eclipse-text-secondary text-sm font-medium">
+                  {stat.title}
+                </CardTitle>
                 <stat.icon className={`h-5 w-5 ${stat.color}`} />
               </CardHeader>
               <CardContent>
-                <div className={`text-3xl font-bold ${stat.color}`}>{stat.value}</div>
+                <div className={`text-3xl font-bold ${stat.color}`}>
+                  {stat.value}
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-12">
+        <Tabs
+          value={activeTab}
+          onValueChange={handleTabChange}
+          className="space-y-12"
+        >
           <TabsList className="grid w-full grid-cols-7 p-2 eclipse-card rounded-2xl h-16">
             {[
               { value: "todos", label: "Todos" },
@@ -1516,41 +1615,43 @@ export default function MailingControl() {
               </TabsTrigger>
             ))}
           </TabsList>
-
           <TabsContent value="todos">{renderTabContent("all")}</TabsContent>
-
           <TabsContent value="marcas">{renderTabContent("Marca")}</TabsContent>
-
           <TabsContent value="bets">{renderTabContent("Bet")}</TabsContent>
-
-          <TabsContent value="agencias">{renderTabContent("Agência")}</TabsContent>
-
-          <TabsContent value="influenciadores">{renderTabContent("Influenciador")}</TabsContent>
-
-          <TabsContent value="pessoas-influentes">{renderTabContent("Pessoa Influente")}</TabsContent>
-
-          <TabsContent value="freelancers">{renderTabContent("Freelancer")}</TabsContent>
+          <TabsContent value="agencias">
+            {renderTabContent("Agência")}
+          </TabsContent>
+          <TabsContent value="influenciadores">
+            {renderTabContent("Influenciador")}
+          </TabsContent>
+          <TabsContent value="pessoas-influentes">
+            {renderTabContent("Pessoa Influente")}
+          </TabsContent>
+          <TabsContent value="freelancers">
+            {renderTabContent("Freelancer")}
+          </TabsContent>
         </Tabs>
 
         <AddBrandDialog
           open={showAddDialog}
           onOpenChange={setShowAddDialog}
           onAdd={(newBrand) => {
-            setBrands([...brands, { ...newBrand, id: brands.length + 1 }])
-            setShowAddDialog(false)
+            setBrands([...brands, { ...newBrand, id: brands.length + 1 }]);
+            setShowAddDialog(false);
           }}
         />
-
         <BrandDetailsModal
           brand={selectedBrand}
           open={!!selectedBrand}
           onClose={() => setSelectedBrand(null)}
           onUpdate={(updatedBrand) => {
-            setBrands(brands.map((b) => (b.id === updatedBrand.id ? updatedBrand : b)))
-            setSelectedBrand(updatedBrand)
+            setBrands(
+              brands.map((b) => (b.id === updatedBrand.id ? updatedBrand : b))
+            );
+            setSelectedBrand(updatedBrand);
           }}
         />
       </div>
     </div>
-  )
+  );
 }
