@@ -45,6 +45,8 @@ import { BrandCard } from "@/components/brand-card";
 import { AddBrandDialog } from "@/components/add-brand-dialog";
 import { BrandDetailsModal } from "@/components/brand-details-modal";
 
+type Brand = typeof mockBrands[0];
+
 const mockBrands = [
   {
     id: 1,
@@ -1092,7 +1094,7 @@ export default function MailingControl() {
 
   // --- ESTADOS DO COMPONENTE ---
   const [brands, setBrands] = useState(mockBrands);
-  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null)
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
