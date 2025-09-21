@@ -45,7 +45,6 @@ import { BrandCard } from "@/components/brand-card";
 import { AddBrandDialog } from "@/components/add-brand-dialog";
 import { BrandDetailsModal } from "@/components/brand-details-modal";
 
-// SEU ARRAY DE DADOS 100% COMPLETO
 const mockBrands = [
   {
     id: 1,
@@ -1069,7 +1068,6 @@ const getFaqByCategory = (category: string) => {
   return [...baseFaq, ...(categorySpecific[category] || [])];
 };
 
-// Componente para mostrar um feedback de carregamento
 const LoadingSkeleton = () => (
   <div className="flex items-center justify-center py-24">
     <div className="relative">
@@ -1460,7 +1458,7 @@ export default function MailingControl() {
                           <Zap className="h-5 w-5 eclipse-accent" />
                           {faq.question}
                         </span>
-                        <ChevronDown className="h-5 w-s5 eclipse-accent transition-transform duration-200" />
+                        <ChevronDown className="h-5 w-5 eclipse-accent transition-transform duration-200" />
                       </Button>
                     </CollapsibleTrigger>
                     <CollapsibleContent className="px-6 pb-6 animate-in slide-in-from-top-2">
