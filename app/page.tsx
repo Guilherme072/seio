@@ -1491,7 +1491,7 @@ export default function MailingControl() {
               </h1>
               <p className="eclipse-text-secondary text-xl">
                 Gerencie contatos de marcas, agências, influenciadores e
-                freelancers
+                freelancerss
               </p>
             </div>
             <Button
