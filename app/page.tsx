@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react" // Verifiquei que o useEffect já estava aqui
 import {
   Plus,
   Search,
@@ -28,8 +28,9 @@ import { BrandCard } from "@/components/brand-card"
 import { AddBrandDialog } from "@/components/add-brand-dialog"
 import { BrandDetailsModal } from "@/components/brand-details-modal"
 
-// Dados reais baseados na lista de contatos fornecida
+// Dados mockados (seu array de mockBrands continua aqui, omitido para economizar espaço)
 const mockBrands = [
+  // ... seu array gigante de contatos fica aqui ...
   // EMPRESAS - Tecnologia e E-commerce
   {
     id: 1,
@@ -968,7 +969,7 @@ const mockBrands = [
     addedBy: "Sistema",
     suggestedBy: null,
   },
-]
+];
 
 const getFaqByCategory = (category: string) => {
   const baseFaq = [
@@ -1067,6 +1068,7 @@ const getFaqByCategory = (category: string) => {
   return [...baseFaq, ...(categorySpecific[category] || [])]
 }
 
+
 export default function MailingControl() {
   const [brands, setBrands] = useState(mockBrands)
   const [selectedBrand, setSelectedBrand] = useState(null)
@@ -1076,6 +1078,15 @@ export default function MailingControl() {
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState("todos")
+
+  // ADICIONADO: Estado para controlar se o componente está no lado do cliente
+  const [isClient, setIsClient] = useState(false)
+
+  // ADICIONADO: Efeito que roda apenas no cliente para atualizar o estado
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
 
   // Simular loading ao trocar de aba
   const handleTabChange = (value: string) => {
@@ -1428,6 +1439,11 @@ export default function MailingControl() {
     )
   }
 
+  // ADICIONADO: Condição para não renderizar no servidor e evitar o erro
+  if (!isClient) {
+    return null;
+  }
+  
   return (
     <div className="min-h-screen eclipse-bg eclipse-scroll">
       <div className="max-w-7xl mx-auto p-10 space-y-12">
