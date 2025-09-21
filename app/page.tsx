@@ -37,7 +37,7 @@ const mockBrands = [
     name: "Casas Bahia / Ponto Frio",
     category: "Marca",
     website: "https://casasbahia.com.br",
-    logo: "/casas-bahia-logo.png",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 1,
@@ -84,7 +84,7 @@ const mockBrands = [
     name: "Opera GX",
     category: "Marca",
     website: "https://operagx.gg",
-    logo: "/opera-gx-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 3,
@@ -121,7 +121,7 @@ const mockBrands = [
     name: "Nord VPN",
     category: "Marca",
     website: "https://nordvpn.com",
-    logo: "/nordvpn-logo.png",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 4,
@@ -158,7 +158,7 @@ const mockBrands = [
     name: "Spotify",
     category: "Marca",
     website: "https://spotify.com",
-    logo: "/spotify-logo.png",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 5,
@@ -195,7 +195,7 @@ const mockBrands = [
     name: "KaBum",
     category: "Marca",
     website: "https://kabum.com.br",
-    logo: "/kabum-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 6,
@@ -234,7 +234,7 @@ const mockBrands = [
     name: "Ambev",
     category: "Marca",
     website: "https://ambev.com.br",
-    logo: "/ambev-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 7,
@@ -271,7 +271,7 @@ const mockBrands = [
     name: "Burger King",
     category: "Marca",
     website: "https://burgerking.com.br",
-    logo: "/burger-king-logo.png",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 8,
@@ -308,7 +308,7 @@ const mockBrands = [
     name: "Danone",
     category: "Marca",
     website: "https://danone.com.br",
-    logo: "/danone-logo.png",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 9,
@@ -355,7 +355,7 @@ const mockBrands = [
     name: "iFood",
     category: "Marca",
     website: "https://ifood.com.br",
-    logo: "/generic-food-delivery-logo.png",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 11,
@@ -394,7 +394,7 @@ const mockBrands = [
     name: "KTO",
     category: "Bet",
     website: "https://kto.com",
-    logo: "/kto-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 12,
@@ -431,7 +431,7 @@ const mockBrands = [
     name: "Sportsbet.io",
     category: "Bet",
     website: "https://sportsbet.io",
-    logo: "/sportsbet-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 13,
@@ -468,7 +468,7 @@ const mockBrands = [
     name: "Stake",
     category: "Bet",
     website: "https://stake.com",
-    logo: "/stake-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 14,
@@ -505,7 +505,7 @@ const mockBrands = [
     name: "Esportes da Sorte",
     category: "Bet",
     website: "https://esportesdasorte.com",
-    logo: "/esportes-da-sorte-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 15,
@@ -544,7 +544,7 @@ const mockBrands = [
     name: "Publination",
     category: "Agência",
     website: "https://publination.com.br",
-    logo: "/publination-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 16,
@@ -601,7 +601,7 @@ const mockBrands = [
     name: "Choco Agency",
     category: "Agência",
     website: "https://chocoagency.com",
-    logo: "/choco-agency-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 19,
@@ -638,7 +638,7 @@ const mockBrands = [
     name: "Jones.ag",
     category: "Agência",
     website: "https://jones.ag",
-    logo: "/jones-agency-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 20,
@@ -677,7 +677,7 @@ const mockBrands = [
     name: "Allan Jesus",
     category: "Pessoa Influente",
     website: "https://instagram.com/allanjesus",
-    logo: "/allan-jesus-avatar.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 21,
@@ -714,7 +714,7 @@ const mockBrands = [
     name: "Guilherme Raya",
     category: "Pessoa Influente",
     website: "https://x.com/guilhermeraya",
-    logo: "/guilherme-raya-avatar.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [],
     suggestedInfluencers: [],
     observations: [
@@ -742,7 +742,7 @@ const mockBrands = [
     name: "Yago - Relam⚡",
     category: "Freelancer",
     website: "https://behance.net/RelampEditor",
-    logo: "/editor-avatar.png",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 22,
@@ -779,7 +779,7 @@ const mockBrands = [
     name: "Kaio Caldera",
     category: "Freelancer",
     website: "https://behance.net/bykaiox",
-    logo: "/diverse-designer-avatars.png",
+    logo: "/logo-Netflix.png",
     contacts: [
       {
         id: 23,
@@ -818,7 +818,7 @@ const mockBrands = [
     name: "Nike",
     category: "Marca",
     website: "https://nike.com.br",
-    logo: "/nike-swoosh.png",
+    logo: "/logo-Netflix.png",
     contacts: [],
     suggestedInfluencers: [],
     observations: [
@@ -844,7 +844,7 @@ const mockBrands = [
     name: "Netflix",
     category: "Marca",
     website: "https://netflix.com",
-    logo: "/netflix-logo.png",
+    logo: "/logo-Netflix.png",
     contacts: [],
     suggestedInfluencers: [],
     observations: [
@@ -870,7 +870,7 @@ const mockBrands = [
     name: "Coca-Cola",
     category: "Marca",
     website: "https://cocacola.com.br",
-    logo: "/coca-cola-logo.png",
+    logo: "/logo-Netflix.png",
     contacts: [],
     suggestedInfluencers: [],
     observations: [
@@ -896,7 +896,7 @@ const mockBrands = [
     name: "McDonald's",
     category: "Marca",
     website: "https://mcdonalds.com.br",
-    logo: "/mcdonalds-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [],
     suggestedInfluencers: [],
     observations: [
@@ -922,7 +922,7 @@ const mockBrands = [
     name: "Samsung",
     category: "Marca",
     website: "https://samsung.com.br",
-    logo: "/samsung-logo.png",
+    logo: "/logo-Netflix.png",
     contacts: [],
     suggestedInfluencers: [],
     observations: [
@@ -948,7 +948,7 @@ const mockBrands = [
     name: "Blaze",
     category: "Bet",
     website: "https://blaze.com",
-    logo: "/blaze-logo.jpg",
+    logo: "/logo-Netflix.png",
     contacts: [],
     suggestedInfluencers: [],
     observations: [
