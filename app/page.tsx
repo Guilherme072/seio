@@ -1124,8 +1124,8 @@ export default function MailingControl() {
     });
   };
 
-  const categories = [...new Set(brands.map((b) => b.category))];
-  const statuses = [...new Set(brands.map((b) => b.status))];
+  const categories = Array.from(new Set(brands.map((b) => b.category)));
+  const statuses = Array.from(new Set(brands.map((b) => b.status)));
   const getBrandsWithoutContacts = (category = "all") =>
     brands.filter(
       (b) =>
