@@ -975,7 +975,100 @@ const mockBrands: Brand[] = [
 ];
 
 const getFaqByCategory = (category: string) => {
-  /* ... sua função ... */ return [];
+  const baseFaq = [
+    {
+      question: "Qual o melhor horário para contato?",
+      answer:
+        "• WhatsApp: 9h às 18h (dias úteis)\n• Email: Terça a quinta, 10h às 16h\n• LinkedIn: Qualquer horário, resposta em 24-48h\n• Telefone: 14h às 17h (evitar início da manhã)\n• Evite sextas-feiras após 15h",
+    },
+    {
+      question: "Como manter o relacionamento?",
+      answer:
+        "• Envie updates mensais sobre performance\n• Compartilhe tendências do mercado\n• Lembre de datas importantes da marca\n• Proponha ideias criativas regularmente\n• Seja proativo em resolver problemas",
+    },
+    {
+      question: "O que fazer quando não respondem?",
+      answer:
+        "• Aguarde 1 semana antes do follow-up\n• Mude o canal de comunicação (email → WhatsApp)\n• Ofereça algo de valor (relatório, insight)\n• Tente contatar outra pessoa da equipe\n• Use gatilhos de urgência (oportunidade limitada)",
+    },
+  ];
+  const categorySpecific: {
+    [key: string]: { question: string; answer: string }[];
+  } = {
+    Marca: [
+      {
+        question: "Como abordar marcas grandes?",
+        answer:
+          "• Pesquise campanhas recentes e mencione\n• Apresente cases similares com ROI comprovado\n• Proponha teste pequeno antes de campanha grande\n• Destaque diferencial competitivo\n• Seja persistente mas respeitoso",
+      },
+      {
+        question: "Onde encontrar contatos de marcas?",
+        answer:
+          "• LinkedIn - Marketing Manager, Brand Manager\n• Site oficial - seção Imprensa ou Contato\n• Eventos de marketing e publicidade\n• Redes sociais corporativas\n• Indicações de outros clientes",
+      },
+    ],
+    Bet: [
+      {
+        question: "Cuidados especiais com casas de apostas?",
+        answer:
+          "• SEMPRE incluir aviso de jogo responsável\n• Verificar compliance legal da campanha\n• Público obrigatoriamente 18+\n• Evitar linguagem que incentive vício\n• Documentar todas as aprovações legais",
+      },
+      {
+        question: "Como abordar o mercado de apostas?",
+        answer:
+          "• Foque em entretenimento, não em ganhos\n• Use influenciadores que já trabalham no setor\n• Destaque aspectos de diversão e socialização\n• Sempre mencione riscos e limites\n• Tenha advogado especializado na equipe",
+      },
+    ],
+    Agência: [
+      {
+        question: "Como fazer benchmarking com agências?",
+        answer:
+          "• Analise cases públicos e premiações\n• Participe de eventos do setor\n• Conecte-se com profissionais no LinkedIn\n• Estude metodologias e processos\n• Proponha trocas de conhecimento",
+      },
+      {
+        question: "Como se relacionar com agências concorrentes?",
+        answer:
+          "• Mantenha relacionamento profissional\n• Compartilhe oportunidades que não servem\n• Participe de grupos e associações\n• Seja transparente sobre especialidades\n• Busque parcerias em projetos grandes",
+      },
+    ],
+    Influenciador: [
+      {
+        question: "Como avaliar um influenciador?",
+        answer:
+          "• Analise engajamento real vs seguidores\n• Verifique alinhamento com valores da marca\n• Observe qualidade do conteúdo\n• Cheque histórico de parcerias\n• Teste com campanha pequena primeiro",
+      },
+      {
+        question: "Como negociar com influenciadores?",
+        answer:
+          "• Seja transparente sobre orçamento\n• Ofereça contrapartidas além do dinheiro\n• Negocie exclusividade quando necessário\n• Defina entregáveis claramente\n• Mantenha relacionamento pós-campanha",
+      },
+    ],
+    "Pessoa Influente": [
+      {
+        question: "Como abordar pessoas muito famosas?",
+        answer:
+          "• SEMPRE via assessoria ou empresário\n• Prepare proposta muito bem estruturada\n• Tenha orçamento compatível com o status\n• Seja extremamente profissional\n• Respeite tempos de resposta longos",
+      },
+      {
+        question: "Cuidados com celebridades?",
+        answer:
+          "• Contratos muito detalhados\n• Cláusulas de imagem e uso\n• Seguro para eventos presenciais\n• Backup plans para imprevistos\n• Equipe jurídica especializada",
+      },
+    ],
+    Freelancer: [
+      {
+        question: "Como gerenciar freelancers?",
+        answer:
+          "• Defina briefings muito claros\n• Estabeleça prazos realistas\n• Mantenha comunicação constante\n• Tenha sempre backup de profissionais\n• Pague em dia para manter relacionamento",
+      },
+      {
+        question: "Como encontrar bons freelancers?",
+        answer:
+          "• Behance e Dribbble para designers\n• LinkedIn para diversos profissionais\n• Indicações de outros clientes\n• Portfólios online e redes sociais\n• Teste com projetos pequenos primeiro",
+      },
+    ],
+  };
+  return [...baseFaq, ...(categorySpecific[category] || [])];
 };
 const LoadingSkeleton = () => (
   <div className="flex-1 flex items-center justify-center">
@@ -1034,7 +1127,52 @@ export default function MailingControl() {
     },
   };
   const getCategoryMessage = (category: string) => {
-    /* ... sua função ... */ return null;
+    switch (category) {
+      case "Marca":
+        return {
+          title: "💼 Foco em Parcerias Comerciais",
+          message:
+            "Priorize fechar parcerias duradouras. Apresente cases de sucesso e ROI comprovado.",
+          icon: Briefcase,
+        };
+      case "Bet":
+        return {
+          title: "⚠️ Jogo Responsável",
+          message:
+            "IMPORTANTE: Sempre promover jogo responsável. Público 18+. Verificar compliance legal.",
+          icon: AlertTriangle,
+        };
+      case "Agência":
+        return {
+          title: "📊 Benchmarking Construtivo",
+          message:
+            "Analise estratégias e cases. Oportunidade de aprendizado mútuo e parcerias estratégicas.",
+          icon: TrendingUp,
+        };
+      case "Influenciador":
+        return {
+          title: "🌟 Relacionamento Direto",
+          message:
+            "Construa relacionamentos autênticos. Foque no fit com a marca e engajamento real.",
+          icon: Star,
+        };
+      case "Pessoa Influente":
+        return {
+          title: "👑 Alto Impacto",
+          message:
+            "Contatos de alto valor. Abordagem mais formal. Geralmente via assessoria ou empresários.",
+          icon: UserCheck,
+        };
+      case "Freelancer":
+        return {
+          title: "🎨 Talentos Criativos",
+          message:
+            "Profissionais para demandas específicas. Mantenha portfólios atualizado e prazos claros.",
+          icon: Palette,
+        };
+      default:
+        return null;
+    }
   };
 
   const renderTabContent = (category = "all") => {
