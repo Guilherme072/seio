@@ -10,7 +10,7 @@ import { Brand } from "@/types" // Importa o tipo Brand
 interface BrandCardProps {
   brand: Brand
   onClick: () => void
- // onUpdate: (brand: Brand) => void
+  onUpdate: (brand: Brand) => void
 }
 
 export function BrandCard({ brand, onClick }: BrandCardProps) {
