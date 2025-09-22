@@ -7,22 +7,33 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Brand } from "@/types" // Importa o tipo Brand
 
 interface EditBrandDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  brand: any
-  onUpdate: (brand: any) => void
+  brand: Brand | null // Usa o tipo Brand
+  onUpdate: (brand: Brand) => void // Usa o tipo Brand
+}
+
+// Define um tipo para o formulário, baseado no Brand, mas com algumas propriedades como string
+type BrandFormData = {
+  name: string;
+  category: string;
+  website: string;
+  observationsText: string;
+  status: string;
+  suggestedInfluencersText: string;
 }
 
 export function EditBrandDialog({ open, onOpenChange, brand, onUpdate }: EditBrandDialogProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<BrandFormData>({
     name: "",
     category: "",
     website: "",
-    observations: "",
+    observationsText: "",
     status: "",
-    suggestedInfluencers: ""
+    suggestedInfluencersText: ""
   })
 
   useEffect(() => {
@@ -31,26 +42,42 @@ export function EditBrandDialog({ open, onOpenChange, brand, onUpdate }: EditBra
         name: brand.name || "",
         category: brand.category || "",
         website: brand.website || "",
-        observations: brand.observations || "",
+        // Pega o texto da primeira observação, se existir
+        observationsText: brand.observations?.[0]?.text || "",
         status: brand.status || "",
-        suggestedInfluencers: brand.suggestedInfluencers?.join(", ") || ""
+        suggestedInfluencersText: brand.suggestedInfluencers?.map(inf => inf.name).join(", ") || ""
       })
     }
   }, [brand])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (!brand) return
     
-    const updatedBrand = {
+    const updatedBrand: Brand = {
       ...brand,
-      ...formData,
-      suggestedInfluencers: formData.suggestedInfluencers
+      name: formData.name,
+      category: formData.category,
+      website: formData.website,
+      status: formData.status,
+      // Atualiza a primeira observação ou cria uma nova
+      observations: [
+        { 
+          id: brand.observations?.[0]?.id || 1, 
+          text: formData.observationsText, 
+          author: brand.observations?.[0]?.author || "Usuário Atual", 
+          date: brand.observations?.[0]?.date || new Date().toISOString().split("T")[0] 
+        }
+      ],
+      suggestedInfluencers: formData.suggestedInfluencersText
         .split(",")
         .map(s => s.trim())
         .filter(s => s.length > 0)
+        .map(name => ({ name, phone: '', instagram: '' })) // Transforma de volta para o formato de objeto
     }
     
     onUpdate(updatedBrand)
+    onOpenChange(false) // Fecha o dialog após salvar
   }
 
   return (
@@ -76,20 +103,17 @@ export function EditBrandDialog({ open, onOpenChange, brand, onUpdate }: EditBra
           
           <div className="space-y-2">
             <Label htmlFor="category">Categoria *</Label>
-            <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
+            <Select required value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Casa de Apostas">Casa de Apostas</SelectItem>
-                <SelectItem value="Marca Esportiva">Marca Esportiva</SelectItem>
+                <SelectItem value="Marca">Marca</SelectItem>
+                <SelectItem value="Bet">Casa de Apostas</SelectItem>
                 <SelectItem value="Agência">Agência</SelectItem>
-                <SelectItem value="Tecnologia">Tecnologia</SelectItem>
-                <SelectItem value="Alimentação">Alimentação</SelectItem>
-                <SelectItem value="Moda">Moda</SelectItem>
-                <SelectItem value="Beleza">Beleza</SelectItem>
-                <SelectItem value="Financeiro">Financeiro</SelectItem>
-                <SelectItem value="Outros">Outros</SelectItem>
+                <SelectItem value="Influenciador">Influenciador</SelectItem>
+                <SelectItem value="Pessoa Influente">Pessoa Influente</SelectItem>
+                <SelectItem value="Freelancer">Freelancer</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -122,8 +146,8 @@ export function EditBrandDialog({ open, onOpenChange, brand, onUpdate }: EditBra
             <Label htmlFor="suggestedInfluencers">Influenciadores Sugeridos</Label>
             <Input
               id="suggestedInfluencers"
-              value={formData.suggestedInfluencers}
-              onChange={(e) => setFormData({...formData, suggestedInfluencers: e.target.value})}
+              value={formData.suggestedInfluencersText}
+              onChange={(e) => setFormData({...formData, suggestedInfluencersText: e.target.value})}
               placeholder="Separe os nomes por vírgula"
             />
           </div>
@@ -132,8 +156,8 @@ export function EditBrandDialog({ open, onOpenChange, brand, onUpdate }: EditBra
             <Label htmlFor="observations">Observações</Label>
             <Textarea
               id="observations"
-              value={formData.observations}
-              onChange={(e) => setFormData({...formData, observations: e.target.value})}
+              value={formData.observationsText}
+              onChange={(e) => setFormData({...formData, observationsText: e.target.value})}
               rows={3}
             />
           </div>

@@ -1,31 +1,19 @@
+"use client"
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Globe, Users, Calendar, ExternalLink, AlertTriangle, User, MessageCircle, Phone, Mail, Video, Plus, FileText, Sparkles, Zap } from 'lucide-react'
+import { Globe, Users, Calendar, FileText, Sparkles, MessageCircle, Phone, Mail, User, Video, AlertTriangle } from 'lucide-react'
 import Image from "next/image"
+import { Brand } from "@/types" // Importa o tipo Brand
 
 interface BrandCardProps {
-  brand: {
-    id: number
-    name: string
-    category: string
-    website: string
-    logo: string
-    contacts: any[]
-    status: string
-    lastContact: string | null
-    lastContactBy: string | null
-    lastContactWith: string | null
-    contactMethod: string | null
-    relationshipLevel: string
-    neverContacted: boolean
-    observations: any[]
-  }
+  brand: Brand
   onClick: () => void
-  onUpdate: (brand: any) => void
+ // onUpdate: (brand: Brand) => void
 }
 
-export function BrandCard({ brand, onClick, onUpdate }: BrandCardProps) {
+export function BrandCard({ brand, onClick }: BrandCardProps) {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Ativo": return "eclipse-badge-success"
@@ -123,18 +111,8 @@ export function BrandCard({ brand, onClick, onUpdate }: BrandCardProps) {
                 {getContactMethodIcon(brand.contactMethod)}
                 <span className="leading-relaxed">
                   Por <strong>{brand.lastContactBy}</strong>
-                  {brand.lastContactWith && (
-                    <>
-                      <br />
-                      com <strong>{brand.lastContactWith}</strong>
-                    </>
-                  )}
-                  {brand.contactMethod && (
-                    <>
-                      <br />
-                      via <strong>{brand.contactMethod}</strong>
-                    </>
-                  )}
+                  {brand.lastContactWith && ( <> <br /> com <strong>{brand.lastContactWith}</strong> </> )}
+                  {brand.contactMethod && ( <> <br /> via <strong>{brand.contactMethod}</strong> </> )}
                 </span>
               </div>
             </div>

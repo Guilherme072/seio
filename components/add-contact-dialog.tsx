@@ -6,32 +6,37 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Contact } from "@/types" // Importa o nosso tipo central
 
+// Define um tipo para um "novo" contato, que não tem todas as propriedades
+// de um contato já existente (como o 'id').
+type NewContact = Omit<Contact, 'id' | 'addedBy' | 'addedDate' | 'contactMethods'>;
+
+// Atualiza as props para usar o tipo correto
 interface AddContactDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onAdd: (contact: any) => void
+  onAdd: (contact: NewContact) => void
 }
 
 export function AddContactDialog({ open, onOpenChange, onAdd }: AddContactDialogProps) {
-  const [formData, setFormData] = useState({
+  // Define um estado inicial para resetar o formulário
+  const initialState: NewContact = {
     name: "",
     role: "",
     email: "",
     phone: "",
     department: ""
-  })
+  };
+  
+  // Aplica o tipo NewContact ao estado do formulário
+  const [formData, setFormData] = useState<NewContact>(initialState);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onAdd(formData)
-    setFormData({
-      name: "",
-      role: "",
-      email: "",
-      phone: "",
-      department: ""
-    })
+    onOpenChange(false) // Fecha o dialog
+    setFormData(initialState) // Reseta o formulário
   }
 
   return (

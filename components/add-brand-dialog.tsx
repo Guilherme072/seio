@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,11 +17,12 @@ import {
 } from "@/components/ui/dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Building2, User, Mail, Phone, Globe, MessageSquare, Plus, UserPlus, Briefcase } from "lucide-react"
+import { Brand } from "@/types" // Importa o tipo Brand
 
 interface AddBrandDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onAdd: (brand: any) => void
+  onAdd: (brand: Omit<Brand, 'id'>) => void // Usa o tipo Brand
 }
 
 export function AddBrandDialog({ open, onOpenChange, onAdd }: AddBrandDialogProps) {
@@ -30,14 +30,12 @@ export function AddBrandDialog({ open, onOpenChange, onAdd }: AddBrandDialogProp
     name: "",
     category: "",
     website: "",
-    observations: "",
-    // Contato principal
+    observationsText: "", // Alterado para não conflitar com o array
     contactName: "",
     contactRole: "",
     contactEmail: "",
     contactPhone: "",
     contactDepartment: "",
-    // Informações adicionais
     addedBy: "Usuário Atual",
     suggestedBy: "",
     status: "Prospecto",
@@ -46,7 +44,7 @@ export function AddBrandDialog({ open, onOpenChange, onAdd }: AddBrandDialogProp
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    const newBrand = {
+    const newBrand: Omit<Brand, 'id'> = {
       name: formData.name,
       category: formData.category,
       website: formData.website,
@@ -66,11 +64,11 @@ export function AddBrandDialog({ open, onOpenChange, onAdd }: AddBrandDialogProp
           ]
         : [],
       suggestedInfluencers: [],
-      observations: formData.observations
+      observations: formData.observationsText
         ? [
             {
               id: 1,
-              text: formData.observations,
+              text: formData.observationsText,
               author: formData.addedBy,
               date: new Date().toISOString().split("T")[0],
             },
@@ -88,22 +86,7 @@ export function AddBrandDialog({ open, onOpenChange, onAdd }: AddBrandDialogProp
     }
 
     onAdd(newBrand)
-
-    // Reset form
-    setFormData({
-      name: "",
-      category: "",
-      website: "",
-      observations: "",
-      contactName: "",
-      contactRole: "",
-      contactEmail: "",
-      contactPhone: "",
-      contactDepartment: "",
-      addedBy: "Usuário Atual",
-      suggestedBy: "",
-      status: "Prospecto",
-    })
+    onOpenChange(false) // Fecha o dialog após adicionar
   }
 
   return (
@@ -155,6 +138,7 @@ export function AddBrandDialog({ open, onOpenChange, onAdd }: AddBrandDialogProp
                   <Select
                     value={formData.category}
                     onValueChange={(value) => setFormData({ ...formData, category: value })}
+                    required
                   >
                     <SelectTrigger className="eclipse-input h-12 border-0">
                       <SelectValue placeholder="Selecione a categoria" />
@@ -182,7 +166,7 @@ export function AddBrandDialog({ open, onOpenChange, onAdd }: AddBrandDialogProp
                       id="website"
                       value={formData.website}
                       onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                      placeholder="https://exemplo.com"
+                      placeholder="[https://exemplo.com](https://exemplo.com)"
                       className="eclipse-input h-12 pl-10 border-0"
                     />
                   </div>
@@ -315,8 +299,8 @@ export function AddBrandDialog({ open, onOpenChange, onAdd }: AddBrandDialogProp
                 </Label>
                 <Textarea
                   id="observations"
-                  value={formData.observations}
-                  onChange={(e) => setFormData({ ...formData, observations: e.target.value })}
+                  value={formData.observationsText}
+                  onChange={(e) => setFormData({ ...formData, observationsText: e.target.value })}
                   placeholder="Adicione informações importantes sobre este contato, como preferências, histórico, dicas de abordagem, etc."
                   className="eclipse-input min-h-[100px] border-0 resize-none"
                 />
