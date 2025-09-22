@@ -1516,19 +1516,19 @@ export default function MailingControl() {
     );
   };
 
-  if (!hasMounted) {
+   if (!hasMounted) {
     return (
-      <div className="min-h-screen felx flex-col eclipse-bg eclipse-scroll">
+      // CORRIGIDO: O erro de digitação 'felx' para 'flex'
+      <div className="min-h-screen flex flex-col eclipse-bg eclipse-scroll">
         <div className="max-w-7xl w-full mx-auto p-10 space-y-12 flex flex-col flex-1">
           <div className="flex items-center justify-between">
             <div className="space-y-3">
               <h1 className="eclipse-title text-5xl font-bold">
-                {" "}
-                Controle de Mailing{" "}
+                Controle de Mailing
               </h1>
               <p className="eclipse-text-secondary text-xl">
                 Gerencie contatos de marcas, agências, influenciadores e
-                freelancerss
+                freelancers
               </p>
             </div>
             <Button
@@ -1545,13 +1545,14 @@ export default function MailingControl() {
   }
 
   return (
-    <div className="min-h-screen eclipse-bg eclipse-scroll">
-      <div className="max-w-7xl mx-auto p-10 space-y-12">
+    // CORREÇÃO 1: Adicionado 'flex flex-col' para o container principal
+    <div className="min-h-screen flex flex-col eclipse-bg eclipse-scroll">
+      {/* CORREÇÃO 2: Adicionado classes para o container interno esticar */}
+      <div className="max-w-7xl w-full mx-auto p-10 space-y-12 flex flex-col flex-1">
         <div className="flex items-center justify-between animate-in fade-in slide-in-from-top-4">
           <div className="space-y-3">
             <h1 className="eclipse-title text-5xl font-bold">
-              {" "}
-              Controle de Mailing{" "}
+              Controle de Mailing
             </h1>
             <p className="eclipse-text-secondary text-xl">
               Gerencie contatos de marcas, agências, influenciadores e
@@ -1568,48 +1569,13 @@ export default function MailingControl() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
           {[
-            {
-              title: "Total",
-              value: stats.totalBrands,
-              icon: Building2,
-              color: "eclipse-text-primary",
-            },
-            {
-              title: "Marcas",
-              value: stats.byCategory.Marca,
-              icon: Briefcase,
-              color: "text-blue-400",
-            },
-            {
-              title: "Bets",
-              value: stats.byCategory.Bet,
-              icon: TrendingUp,
-              color: "text-red-400",
-            },
-            {
-              title: "Agências",
-              value: stats.byCategory.Agência,
-              icon: Building2,
-              color: "text-purple-400",
-            },
-            {
-              title: "Influencers",
-              value: stats.byCategory.Influenciador,
-              icon: Star,
-              color: "text-yellow-400",
-            },
-            {
-              title: "Influentes",
-              value: stats.byCategory["Pessoa Influente"],
-              icon: UserCheck,
-              color: "text-green-400",
-            },
-            {
-              title: "Freelancers",
-              value: stats.byCategory.Freelancer,
-              icon: Palette,
-              color: "text-orange-400",
-            },
+            { title: "Total", value: stats.totalBrands, icon: Building2, color: "eclipse-text-primary", },
+            { title: "Marcas", value: stats.byCategory.Marca, icon: Briefcase, color: "text-blue-400", },
+            { title: "Bets", value: stats.byCategory.Bet, icon: TrendingUp, color: "text-red-400", },
+            { title: "Agências", value: stats.byCategory.Agência, icon: Building2, color: "text-purple-400", },
+            { title: "Influencers", value: stats.byCategory.Influenciador, icon: Star, color: "text-yellow-400", },
+            { title: "Influentes", value: stats.byCategory["Pessoa Influente"], icon: UserCheck, color: "text-green-400", },
+            { title: "Freelancers", value: stats.byCategory.Freelancer, icon: Palette, color: "text-orange-400", },
           ].map((stat, index) => (
             <Card
               key={stat.title}
@@ -1631,10 +1597,11 @@ export default function MailingControl() {
           ))}
         </div>
 
+        {/* CORREÇÃO 3: Adicionado classes para o componente de Abas esticar */}
         <Tabs
           value={activeTab}
           onValueChange={handleTabChange}
-          className="space-y-12"
+          className="space-y-12 flex flex-col flex-1"
         >
           <TabsList className="grid w-full grid-cols-7 p-2 eclipse-card rounded-2xl h-16">
             {[
@@ -1655,19 +1622,21 @@ export default function MailingControl() {
               </TabsTrigger>
             ))}
           </TabsList>
-          <TabsContent value="todos">{renderTabContent("all")}</TabsContent>
-          <TabsContent value="marcas">{renderTabContent("Marca")}</TabsContent>
-          <TabsContent value="bets">{renderTabContent("Bet")}</TabsContent>
-          <TabsContent value="agencias">
+          
+          {/* CORREÇÃO 4: Adicionado 'flex-1' para o conteúdo das abas ocupar espaço */}
+          <TabsContent value="todos" className="flex-1">{renderTabContent("all")}</TabsContent>
+          <TabsContent value="marcas" className="flex-1">{renderTabContent("Marca")}</TabsContent>
+          <TabsContent value="bets" className="flex-1">{renderTabContent("Bet")}</TabsContent>
+          <TabsContent value="agencias" className="flex-1">
             {renderTabContent("Agência")}
           </TabsContent>
-          <TabsContent value="influenciadores">
+          <TabsContent value="influenciadores" className="flex-1">
             {renderTabContent("Influenciador")}
           </TabsContent>
-          <TabsContent value="pessoas-influentes">
+          <TabsContent value="pessoas-influentes" className="flex-1">
             {renderTabContent("Pessoa Influente")}
           </TabsContent>
-          <TabsContent value="freelancers">
+          <TabsContent value="freelancers" className="flex-1">
             {renderTabContent("Freelancer")}
           </TabsContent>
         </Tabs>
@@ -1676,7 +1645,9 @@ export default function MailingControl() {
           open={showAddDialog}
           onOpenChange={setShowAddDialog}
           onAdd={(newBrand) => {
-            setBrands([...brands, { ...newBrand, id: brands.length + 1 }]);
+            const newId = brands.length > 0 ? Math.max(...brands.map(b => b.id)) + 1 : 1;
+            const brandToAdd: Brand = { ...newBrand, id: newId };
+            setBrands([...brands, brandToAdd]);
             setShowAddDialog(false);
           }}
         />
