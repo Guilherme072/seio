@@ -47,7 +47,7 @@ import { BrandDetailsModal } from "@/components/brand-details-modal";
 import { Brand } from "@/types"; // USANDO O TIPO CENTRAL
 
 // SEU ARRAY DE DADOS COMPLETO, AGORA TIPADO
-const mockBrandsData: Brand[] = [
+const mockBrands: Brand[] = [
   {
     id: 1,
     name: "Casas Bahia / Ponto Frio",
@@ -1087,7 +1087,7 @@ export default function MailingControl() {
     setHasMounted(true);
   }, []);
 
-  const [brands, setBrands] = useState<Brand[]>(mockBrandsData);
+  const [brands, setBrands] = useState<Brand[]>(mockBrands);
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
