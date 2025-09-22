@@ -44,10 +44,10 @@ import {
 import { BrandCard } from "@/components/brand-card";
 import { AddBrandDialog } from "@/components/add-brand-dialog";
 import { BrandDetailsModal } from "@/components/brand-details-modal";
+import { Brand } from "@/types"; // USANDO O TIPO CENTRAL
 
-type Brand = typeof mockBrands[0];
-
-const mockBrands = [
+// SEU ARRAY DE DADOS COMPLETO, AGORA TIPADO
+const mockBrandsData: Brand[] = [
   {
     id: 1,
     name: "Casas Bahia / Ponto Frio",
@@ -993,9 +993,9 @@ const getFaqByCategory = (category: string) => {
         "• Aguarde 1 semana antes do follow-up\n• Mude o canal de comunicação (email → WhatsApp)\n• Ofereça algo de valor (relatório, insight)\n• Tente contatar outra pessoa da equipe\n• Use gatilhos de urgência (oportunidade limitada)",
     },
   ];
-
-  // A MUDANÇA É AQUI: Adicionamos a "assinatura de índice" para o TypeScript
-  const categorySpecific: { [key: string]: { question: string; answer: string }[] } = {
+  const categorySpecific: {
+    [key: string]: { question: string; answer: string }[];
+  } = {
     Marca: [
       {
         question: "Como abordar marcas grandes?",
@@ -1069,7 +1069,6 @@ const getFaqByCategory = (category: string) => {
       },
     ],
   };
-
   return [...baseFaq, ...(categorySpecific[category] || [])];
 };
 
@@ -1082,19 +1081,14 @@ const LoadingSkeleton = () => (
   </div>
 );
 
-// ===================================================================================
-// COMPONENTE PRINCIPAL DA PÁGINA
-// ===================================================================================
 export default function MailingControl() {
-  // --- CORREÇÃO DEFINITIVA PARA ERRO DE HIDRATAÇÃO ---
   const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
-  // --- ESTADOS DO COMPONENTE ---
-  const [brands, setBrands] = useState(mockBrands);
-  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null)
+  const [brands, setBrands] = useState<Brand[]>(mockBrandsData);
+  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -1102,7 +1096,6 @@ export default function MailingControl() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("todos");
 
-  // --- FUNÇÕES DE LÓGICA ---
   const handleTabChange = (value: string) => {
     setIsLoading(true);
     setActiveTab(value);
@@ -1219,22 +1212,29 @@ export default function MailingControl() {
           >
             {categoryMessage && (
               <Card className="eclipse-card eclipse-card-hover rounded-2xl border-2">
+                {" "}
                 <CardContent className="p-8">
+                  {" "}
                   <div className="flex items-center gap-6">
+                    {" "}
                     <div className="p-4 rounded-2xl eclipse-gradient">
-                      <categoryMessage.icon className="h-8 w-8 eclipse-text-primary" />
-                    </div>
+                      {" "}
+                      <categoryMessage.icon className="h-8 w-8 eclipse-text-primary" />{" "}
+                    </div>{" "}
                     <div className="flex-1">
+                      {" "}
                       <h3 className="eclipse-title text-2xl font-bold mb-3 flex items-center gap-4">
-                        {categoryMessage.title}
-                        <ChevronRight className="h-6 w-6 eclipse-accent eclipse-pulse" />
-                      </h3>
+                        {" "}
+                        {categoryMessage.title}{" "}
+                        <ChevronRight className="h-6 w-6 eclipse-accent eclipse-pulse" />{" "}
+                      </h3>{" "}
                       <p className="eclipse-text-secondary text-base leading-relaxed">
-                        {categoryMessage.message}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
+                        {" "}
+                        {categoryMessage.message}{" "}
+                      </p>{" "}
+                    </div>{" "}
+                  </div>{" "}
+                </CardContent>{" "}
               </Card>
             )}
             <Card className="eclipse-card eclipse-card-hover rounded-2xl">
@@ -1272,7 +1272,8 @@ export default function MailingControl() {
                           value={cat}
                           className="eclipse-text-primary hover:eclipse-gradient"
                         >
-                          {cat}
+                          {" "}
+                          {cat}{" "}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -1289,7 +1290,8 @@ export default function MailingControl() {
                           value={status}
                           className="eclipse-text-primary hover:eclipse-gradient"
                         >
-                          {status}
+                          {" "}
+                          {status}{" "}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -1320,112 +1322,144 @@ export default function MailingControl() {
             </div>
             {filteredBrands.length === 0 && !isLoading && (
               <Card className="eclipse-card eclipse-card-hover rounded-2xl">
+                {" "}
                 <CardContent className="text-center py-20">
+                  {" "}
                   <div className="p-6 rounded-2xl eclipse-gradient inline-block mb-8">
-                    <Building2 className="h-16 w-16 eclipse-text-primary eclipse-pulse" />
-                  </div>
+                    {" "}
+                    <Building2 className="h-16 w-16 eclipse-text-primary eclipse-pulse" />{" "}
+                  </div>{" "}
                   <h3 className="eclipse-title text-2xl font-bold mb-4">
-                    Nenhum resultado encontrado
-                  </h3>
+                    {" "}
+                    Nenhum resultado encontrado{" "}
+                  </h3>{" "}
                   <p className="eclipse-text-secondary mb-8 max-w-md mx-auto text-base leading-relaxed">
+                    {" "}
                     Tente ajustar os filtros ou adicione um novo contato para
-                    começar.
-                  </p>
+                    começar.{" "}
+                  </p>{" "}
                   <Button
                     onClick={() => setShowAddDialog(true)}
                     className="eclipse-button-primary h-14 px-10 rounded-xl font-semibold text-base"
                   >
-                    <Plus className="h-5 w-5 mr-3" />
-                    Adicionar Novo
-                  </Button>
-                </CardContent>
+                    {" "}
+                    <Plus className="h-5 w-5 mr-3" /> Adicionar Novo{" "}
+                  </Button>{" "}
+                </CardContent>{" "}
               </Card>
             )}
             {categoryBrandsWithoutContacts.length > 0 && (
               <Card className="eclipse-card eclipse-card-hover rounded-2xl border-2 border-red-500/20">
+                {" "}
                 <CardHeader className="pb-6">
+                  {" "}
                   <div className="flex items-center gap-6">
+                    {" "}
                     <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20">
-                      <Target className="h-8 w-8 text-red-400 eclipse-pulse" />
-                    </div>
+                      {" "}
+                      <Target className="h-8 w-8 text-red-400 eclipse-pulse" />{" "}
+                    </div>{" "}
                     <div>
+                      {" "}
                       <CardTitle className="eclipse-title text-2xl flex items-center gap-4">
-                        Parcerias a Serem Buscadas
+                        {" "}
+                        Parcerias a Serem Buscadas{" "}
                         <Badge className="eclipse-badge-danger text-sm px-4 py-2 rounded-full">
-                          {categoryBrandsWithoutContacts.length}
-                        </Badge>
-                      </CardTitle>
+                          {" "}
+                          {categoryBrandsWithoutContacts.length}{" "}
+                        </Badge>{" "}
+                      </CardTitle>{" "}
                       <CardDescription className="eclipse-text-secondary mt-2 text-base">
+                        {" "}
                         {category === "all"
                           ? "Contatos que ainda não possuem informações cadastradas e precisam de prospecção"
-                          : `${category}s que precisam de prospecção e desenvolvimento de relacionamento`}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
+                          : `${category}s que precisam de prospecção e desenvolvimento de relacionamento`}{" "}
+                      </CardDescription>{" "}
+                    </div>{" "}
+                  </div>{" "}
+                </CardHeader>{" "}
                 <CardContent className="px-8 pb-8">
+                  {" "}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {" "}
                     {categoryBrandsWithoutContacts.map((brand, index) => (
                       <Card
                         key={brand.id}
                         className="eclipse-card eclipse-card-hover rounded-xl border border-red-500/20 animate-in fade-in slide-in-from-left-4 h-full"
                         style={{ animationDelay: `${index * 150}ms` }}
                       >
+                        {" "}
                         <CardContent className="p-6 h-full flex flex-col">
+                          {" "}
                           <div className="flex items-center gap-4 mb-6">
+                            {" "}
                             <div className="w-14 h-14 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                              <AlertTriangle className="h-7 w-7 text-red-400" />
-                            </div>
+                              {" "}
+                              <AlertTriangle className="h-7 w-7 text-red-400" />{" "}
+                            </div>{" "}
                             <div>
+                              {" "}
                               <h3 className="eclipse-text-primary font-semibold text-lg">
-                                {brand.name}
-                              </h3>
+                                {" "}
+                                {brand.name}{" "}
+                              </h3>{" "}
                               <p className="eclipse-text-muted text-sm">
-                                {brand.category}
-                              </p>
-                            </div>
-                          </div>
+                                {" "}
+                                {brand.category}{" "}
+                              </p>{" "}
+                            </div>{" "}
+                          </div>{" "}
                           <div className="space-y-4 text-sm flex-1">
+                            {" "}
                             <div className="flex justify-between items-center">
+                              {" "}
                               <span className="eclipse-text-muted">
-                                Adicionado por:
-                              </span>
+                                {" "}
+                                Adicionado por:{" "}
+                              </span>{" "}
                               <span className="eclipse-text-secondary font-medium">
-                                {brand.addedBy}
-                              </span>
-                            </div>
+                                {" "}
+                                {brand.addedBy}{" "}
+                              </span>{" "}
+                            </div>{" "}
                             {brand.suggestedBy && (
                               <div className="flex justify-between items-center">
+                                {" "}
                                 <span className="eclipse-text-muted">
-                                  Sugerido por:
-                                </span>
+                                  {" "}
+                                  Sugerido por:{" "}
+                                </span>{" "}
                                 <span className="eclipse-accent font-medium">
-                                  {brand.suggestedBy}
-                                </span>
+                                  {" "}
+                                  {brand.suggestedBy}{" "}
+                                </span>{" "}
                               </div>
-                            )}
+                            )}{" "}
                             <div className="flex justify-between items-center">
+                              {" "}
                               <span className="eclipse-text-muted">
-                                Influenciadores:
-                              </span>
+                                {" "}
+                                Influenciadores:{" "}
+                              </span>{" "}
                               <Badge className="eclipse-badge text-xs px-3 py-1 rounded-full">
-                                {brand.suggestedInfluencers.length}
-                              </Badge>
-                            </div>
-                          </div>
+                                {" "}
+                                {brand.suggestedInfluencers.length}{" "}
+                              </Badge>{" "}
+                            </div>{" "}
+                          </div>{" "}
                           <Button
                             size="sm"
                             className="w-full mt-6 eclipse-button h-12 rounded-lg font-medium"
                             onClick={() => setSelectedBrand(brand)}
                           >
-                            <Sparkles className="h-4 w-4 mr-2" />
-                            Ver Detalhes
-                          </Button>
-                        </CardContent>
+                            {" "}
+                            <Sparkles className="h-4 w-4 mr-2" /> Ver Detalhes{" "}
+                          </Button>{" "}
+                        </CardContent>{" "}
                       </Card>
-                    ))}
-                  </div>
-                </CardContent>
+                    ))}{" "}
+                  </div>{" "}
+                </CardContent>{" "}
               </Card>
             )}
             <Card className="eclipse-card eclipse-card-hover rounded-2xl">
@@ -1439,7 +1473,8 @@ export default function MailingControl() {
                       Dúvidas Frequentes e Dicas
                       {category !== "all" && (
                         <Badge className="eclipse-badge text-sm px-4 py-2 rounded-full">
-                          {category}
+                          {" "}
+                          {category}{" "}
                         </Badge>
                       )}
                     </CardTitle>
@@ -1463,7 +1498,6 @@ export default function MailingControl() {
                           <Zap className="h-5 w-5 eclipse-accent" />
                           {faq.question}
                         </span>
-                        {/* O ERRO DE DIGITAÇÃO ESTAVA AQUI, AGORA CORRIGIDO */}
                         <ChevronDown className="h-5 w-5 eclipse-accent transition-transform duration-200" />
                       </Button>
                     </CollapsibleTrigger>
@@ -1489,7 +1523,8 @@ export default function MailingControl() {
           <div className="flex items-center justify-between">
             <div className="space-y-3">
               <h1 className="eclipse-title text-5xl font-bold">
-                Controle de Mailing
+                {" "}
+                Controle de Mailing{" "}
               </h1>
               <p className="eclipse-text-secondary text-xl">
                 Gerencie contatos de marcas, agências, influenciadores e
@@ -1515,7 +1550,8 @@ export default function MailingControl() {
         <div className="flex items-center justify-between animate-in fade-in slide-in-from-top-4">
           <div className="space-y-3">
             <h1 className="eclipse-title text-5xl font-bold">
-              Controle de Mailing
+              {" "}
+              Controle de Mailing{" "}
             </h1>
             <p className="eclipse-text-secondary text-xl">
               Gerencie contatos de marcas, agências, influenciadores e
